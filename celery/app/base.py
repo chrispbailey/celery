@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Actual App instance implementation."""
 from __future__ import absolute_import, unicode_literals
-
+import time
 import os
 import threading
 import warnings
@@ -1199,7 +1199,12 @@ class Celery(object):
     @cached_property
     def amqp(self):
         """AMQP related functionality: :class:`~@amqp`."""
-        return instantiate(self.amqp_cls, app=self)
+        t0 = time.time()
+        print(t0, 'amqp.instantiate',self.amqp_cls,self)
+        amqp = instantiate(self.amqp_cls, app=self)
+        t1 = time.time()
+        print(t1, 'amqp.instantiate...done in ', t1 - t0)
+        return amqp
 
     @cached_property
     def backend(self):

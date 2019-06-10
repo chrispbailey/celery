@@ -3,7 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import sys
-
+import time
 from billiard.einfo import ExceptionInfo
 from kombu import serialization
 from kombu.exceptions import OperationalError
@@ -528,10 +528,11 @@ class Task(object):
                 pass
             else:
                 check_arguments(*(args or ()), **(kwargs or {}))
-
         app = self._get_app()
         if app.conf.task_always_eager:
+            print(time.time(),'acquire')
             with app.producer_or_acquire(producer) as eager_producer:
+                print(time.time(),'acquire....done')
                 serializer = options.get(
                     'serializer',
                     (eager_producer.serializer if eager_producer.serializer
